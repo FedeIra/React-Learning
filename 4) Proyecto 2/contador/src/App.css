@@ -1,0 +1,43 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  background-image: url("./imagenes/background-image.png");
+}
+
+.App {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  padding: 15px;
+  font-family: sans-serif;
+}
+
+.spartan-logo-contenedor {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px;
+}
+
+.spartan-logo {
+  height: 200px;
+  border-radius: 10px;
+  border: black solid 2px;
+}
+
+.contenedor-principal {
+  height: 550px;
+  min-width: 600;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}

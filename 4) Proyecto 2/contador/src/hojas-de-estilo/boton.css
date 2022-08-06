@@ -1,0 +1,29 @@
+@import url("https://fonts.googleapis.com/css2?family=Caesar+Dressing&display=swap");
+
+@import url(https://cur.cursors-4u.net/cursors/cur-10/cur964.cur);
+
+button {
+  width: 250px;
+  height: 80px;
+  font-family: "Caesar Dressing", cursive;
+  font-size: 25px;
+  font-weight: bold;
+  color: rgb(0, 0, 0);
+  border: 2px solid rgb(0, 0, 0);
+  border-radius: 10px;
+  margin: 5px;
+  cursor: url(https://cur.cursors-4u.net/cursors/cur-10/cur964.cur), auto !important;
+}
+
+button:hover {
+  background-color: rgb(0, 0, 0);
+  color: #f2f2f2c5;
+}
+
+.boton-click {
+  background-color: #7c0909;
+}
+
+.boton-reiniciar {
+  background-color: #780909;
+}

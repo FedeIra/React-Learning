@@ -1,0 +1,14 @@
+@import url("https://fonts.googleapis.com/css2?family=Caesar+Dressing&display=swap");
+
+.contador {
+  min-width: 300px;
+  height: 300px;
+  font-size: 100px;
+  color: rgb(130, 8, 8);
+  font-family: "Caesar Dressing", cursive;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 8px solid #830707;
+  margin-bottom: 15px;
+}
