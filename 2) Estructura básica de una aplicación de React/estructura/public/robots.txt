@@ -1,0 +1,6 @@
+# https://www.robotstxt.org/robotstxt.html
+User-agent: *
+Disallow:
+
+
+Nota: Esto sirve para darle ciertas guías a los robots que analizan el contenido de la página automáticamente.

@@ -1,0 +1,11 @@
+/* Acá se asignan estilos en general que se le van a aplicar a la aplicación. También a distintos elementos que tengamos en el doc App. en el que importa este css. */
+
+* {
+  margin: 0;
+  padding: auto;
+} /* es lo que se pone por defecto. */
+
+html,
+body {
+  font-size: 18px;
+}
