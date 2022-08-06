@@ -8,4 +8,32 @@
 html,
 body {
   font-size: 18px;
+  background-color: #f5f6f7;
+}
+
+h1 {
+  max-width: 940px;
+  font-size: 2.5em; /* em es un factor relativo al tamaño de la letra de su contenedor. Es 2.5 veces el valor del tamaño de la letra de su div. */
+  font-family: Lato, sans-serif; /* Le pones dos tipos de letras. El que queres y el segundo es por si el browser no reconoce el tipo de letra. */
+  font-weight: 700;
+  line-height: 1.1; /* Separación entre líneas */
+  margin: 40px 0;
+}
+
+.App {
+  min-height: 100vh; /* vh por viewport height. Se adapta a la alturad el navegador. */
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.contenedor-principal {
+  min-height: 600px; /* altura mínima así dependiendo de los testimonios el contenedor se va a adaptar. */
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
 }
