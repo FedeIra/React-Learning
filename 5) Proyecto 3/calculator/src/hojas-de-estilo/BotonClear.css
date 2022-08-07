@@ -1,0 +1,25 @@
+@import url(https://cur.cursors-4u.net/cursors/cur-10/cur964.cur);
+
+@import url("https://fonts.googleapis.com/css2?family=Caesar+Dressing&display=swap");
+
+.boton-clear {
+  height: 60px;
+  font-size: 2.5em; /* em es una unidad relativa. 1.6 veces el tamaño relativo de su contenedor. */
+  display: flex;
+  flex: 1; /* porque queremos que el boton llene el espacio */
+  background-color: rgb(140, 120, 97);
+  margin-top: 8px;
+  font-family: "Caesar Dressing", cursive;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  color: rgb(0, 0, 0);
+  border: 2px dashed rgb(2, 2, 2);
+  border-radius: 30px;
+  cursor: url(https://cur.cursors-4u.net/cursors/cur-10/cur964.cur), auto !important;
+  user-select: none;
+}
+
+.boton-clear:hover {
+  background-color: rgb(111, 53, 46);
+}
