@@ -30,14 +30,14 @@ function App() {
       <div className="contenedor-principal">
         <Contador numClicks={numberClicks} />
         <Boton
-          texto="Crear Hoplita"
+          texto="Recruit hoplite"
           esBotonDeClick={true}
           manejarClick={
             addClick
           } /* le metemos el valor de la función al prop. Lo recibe la function Boton como prop para poder usarlo en su función. */
         />
         <Boton
-          texto="Eliminar ejercito"
+          texto="Dismiss army"
           esBotonDeClick={false}
           manejarClick={reiniciarContador}
         />
