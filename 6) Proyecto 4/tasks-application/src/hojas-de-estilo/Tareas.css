@@ -12,6 +12,19 @@
   cursor: pointer;
 }
 
+/* Colores: degrade de colores a gris más claro. Selecciona el enesimo hijo que cumple con la condición. */
+.tarea-contenedor:nth-child(3n + 1) {
+  background-color: #1b1b32;
+}
+
+.tarea-contenedor:nth-child(3n + 2) {
+  background-color: #2a2a40;
+}
+
+.tarea-contenedor:nth-child(3n + 3) {
+  background: color #3b3b4f;
+}
+
 /* Texto */
 .tarea-texto {
   width: 100%;
