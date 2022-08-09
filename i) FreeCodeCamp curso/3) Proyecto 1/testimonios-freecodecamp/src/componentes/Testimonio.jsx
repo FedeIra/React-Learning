@@ -17,7 +17,7 @@ function Testimonio(props) {
         <p className="cargo-testimonio">
           {props.cargo} at <strong>{props.empresa}</strong>
         </p>
-        <p className="texto-testimonio">"{props.testimonio}"</p>{" "}
+        <p className="texto-testimonio">"{props.testimonio}"</p>
         {/* Agregué las comillas para no arriesgarnos a omitirlas cuando pasemos los props */}
       </div>
     </div>
