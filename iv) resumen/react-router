@@ -1,0 +1,85 @@
+https://reactrouter.com/docs/en/v6/api
+
+https://v5.reactrouter.com/ --> ES LA QUE ENTRA EN EL CP
+
+Instalaciones necesarias: 
+
+1. react-router-dom
+	* automaticamente instala la dependencia react-router 
+
+Routers: 
+Tenemos que englobar toda nuestra aplicacion en alguno de los Routers, previamente 
+debemos importarlos de react-router-dom
+
+
+	* <BrowserRouter />
+		- la ruta queda mas limpia y prolija
+		- requiere configuracion adicional en el server
+	* <HashRouter /> 
+		- legacy 
+		- agrega un # al final de la ruta
+		- mas facil de configurar en el server
+
+Routing: 
+Proceso por el cual decidimos que componente vamos a renderizar en cada path, tambien
+podemos anidar declaraciones 
+
+<Routes> -> interpreta el uso o comportamiento de <Switch> en la nueva version 
+	¿Que hacia Switch? Algo muy similar a lo que seria un switch case, donde encontraba
+	UNA coincidencia devolvia y listo, no continuaba, si no lo envolviamos en un SWITCH
+	evaluaba todas las alternativas que matcheaban en el path. Dado que esto traia problemas
+	ya que habia que tener mucho cuidado en el orden que se le daban a las rutas en 
+	switch, se decidio cambiarlo por <Routes> quien encuentra o busca aquel path 
+	que mas coincida 
+
+<Route> y <Routes> son las principales formas de renderizar algo en React Router basado 
+en la location actual. Se puede pensar a <Router> como un if, si coincide con el path
+y el url sobre el cual se encuentre, entonces renderiza el elemento. 
+La propiedad caseSenstive (antes sensitive) determina si el match tiene que ser 
+case-sensitive o no, por defecto esta en false. 
+
+Cuando la location cambia, es decir la url, <Routes> analiza todos los <Route> para
+encontrar la mejor coincidencia y renderiza el elemento. Se pueden anidar Routes. 
+
+
+
+Tambien, el ruteo se puede definir como un objeto gracias a useRoutes() 
+
+Navigation: 
+<Link> o <NavLink> internamente no hacen mas que renderizar un <a>, nos permite 
+generar la navegacion dentro de nuestra aplicacion, al hacer click nos redirije a la 
+url deseada. 
+La diferencia entre estos es que si utilizo NavLink puedo ponerle estilos a mi elemento 
+mientras que si uso Link no. Para poder colocarle estilos (en la nueva version) debo 
+pasarle una funcion a className o a style(inline). En la version anterior, con enviar 
+un objeto a activeStyle y una clase a activeClassName es suficiente. 
+
+<Link> props: 
+	- to
+		- el valor no debe comenzar con / 
+		- se arma en funcion del url en el que se encuentra, es decir 
+		que si estamos parados en /users se va a formar a partir de alli 
+		por lo tanto si dice to='/profile' el path final sera '/users/profile'
+		- si queremos vincularlo mas arriba en la jerarquia podemos hacerlo con ..
+		cada .. elimina un padre
+
+<NavLink> props: 
+	Es un <Link> especial que sabe reconocer si esta o no activo. 
+	Por defecto una clase 'active' es agregado al <NavLink> por lo tanto si definimos
+	dicha clase, cada vez que este activo se va a aplicar la clase. 
+	- to 
+	- activeClassName que ahora en la nueva version es simplemente className 
+	en la version 5.1 le pasabamos el nombre de una clase, en la version 6.0 le pasamos
+	una funcion que recibe isActive, un booleano, para determinar si esta activo o no 
+	y con un ternario determinar el valor de la cales 
+	- activeStyle que ahora en la nueva version es simplemente style, idem el caso anterior
+	en la version 5.1 le pasabamos un objeto, como haciamos con inlineStyling, ahora 
+	le pasamos una funcion con las mismas caracteristicas ya menciodas, solo que en vez
+	de devolver el nombre de una clase devolvera un objeto para el estilo 
+
+useNavigate() ex useHistory() nos va a permitir conocer cuales fueron los movimientos
+hechos dentro de nuestra pagina. 
+
+
+
+
