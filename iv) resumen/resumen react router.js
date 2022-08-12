@@ -1,4 +1,4 @@
-v5.1 -> v6.0
+/* v5.1 -> v6.0
 
 <Switch/> vs <Routes /> (en plural)
 
@@ -17,7 +17,7 @@ v5.1 																		v6.0
 * En nuestro nodo hijo 													* Tanto el Route como el Link son relativos
 tenemos que indicar cual es 											  por lo tanto saben de donde son "invocados" y 
 la ruta base, es decir a partir             							  definen la nueva ruta en funcion de eso. 
-de donde viene 
+de donde viene  */
 	
 function App() {														  function App(){
   return (																		return(
