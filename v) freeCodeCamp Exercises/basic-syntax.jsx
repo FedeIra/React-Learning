@@ -832,7 +832,7 @@ class MyForm extends React.Component {
   handleChange(event) {
     this.setState({
       input: event.target.value,
-    });
+    }); /* The read-only target property of the Event interface is a reference to the object onto which the event was dispatched.  */
   }
   handleSubmit(event) {
     // Cambia el código debajo de esta línea
@@ -907,7 +907,6 @@ class Navbar extends React.Component {
 !Pasa una función callback como "props" a componentes hijos:
 Puedes pasar state como "props" a los componentes hijos, pero no estás limitado a pasar datos. También puedes pasar funciones manejadoras o cualquier método que se defina en un componente React a un componente hijo. Así es como tú permites que los componentes hijos interactúen con sus componentes padres. Pasas métodos a un hijo igual que un "prop" normal. Se le asigna un nombre y tienes acceso a ese nombre de método en this.props en el componente hijo.
 */
-
 class MyApp extends React.Component {
   constructor(props) {
     super(props);
@@ -925,7 +924,11 @@ class MyApp extends React.Component {
     return (
       <div>
         {/* Cambia el código debajo de esta línea */}
-        <GetInput input={this.state.inputValue} />
+        <GetInput
+          input={this.state.inputValue}
+          handleChange={this.handleChange}
+        />
+        <RenderInput input={this.state.inputValue} />
         {/* Cambia el código encima de esta línea */}
       </div>
     );
@@ -959,3 +962,746 @@ class RenderInput extends React.Component {
     );
   }
 }
+
+/*
+!Usa el método de ciclo de vida componentWillMount
+Los componentes React tienen varios métodos especiales que proporcionan oportunidades para realizar acciones en puntos específicos en el ciclo de vida de un componente.
+
+Estos se llaman métodos de ciclo de vida, o interceptores (hooks) de ciclo de vida, y te permiten interceptar componentes en determinados momentos del tiempo.
+
+Los métodos de ciclo de vida son llamados antes de que un componente se renderice en la página.
+
+Lista de algunos de los métodos principales del ciclo de vida: componentWillMount() componentDidMount() shouldComponentUpdate() componentDidUpdate() componentWillUnmount()
+*/
+
+/*
+!componentWillMount
+*/
+class MyComponent extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+  componentWillMount() {
+    // Cambia el código debajo de esta línea
+    console.log(this.props);
+    // Cambia el código encima de esta línea
+  }
+  render() {
+    return <div />;
+  }
+}
+
+/*
+!componentDidMount y API
+La mejor práctica con React es ubicar las llamadas API o cualquier llamada a tu servidor en el método de ciclo de vida componentDidMount().
+
+Este método se llama después de que un componente es montado (mounted) en el DOM.
+
+Cuando se llame a una API en este método, y se modifique el estado con los datos que la API devuelve, automáticamente se ejecutará una actualización una vez que los datos sean recibidos.
+
+El siguiente ejemplo se hace con set time out que simula un llamado a una API y lo que puede tardar:
+*/
+class MyComponent extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      activeUsers: null,
+    };
+  }
+  componentDidMount() {
+    setTimeout(() => {
+      this.setState({
+        activeUsers: 1273,
+      });
+    }, 2500);
+  }
+  render() {
+    return (
+      <div>
+        {/* Cambia el código debajo de esta línea */}
+        <h1>Active Users: {this.state.activeUsers} </h1>
+        {/* Cambia el código encima de esta línea */}
+      </div>
+    );
+  }
+}
+
+/*
+!Agrega detectores de eventos (Event Listeners)
+!componentDidMount
+!componentWillUnmount()
+!document.addEventListener()
+!document.removeEventListener()
+
+El método componentDidMount() es también el mejor lugar para adjuntar cualquier detector de eventos que necesites agregar para una funcionalidad específica.
+React proporciona un sistema de eventos sintético que envuelve el sistema de eventos nativo presente en los navegadores.
+
+Esto significa que el sistema de eventos sintético se comporta exactamente igual independientemente del navegador del usuario, incluso si los eventos nativos se comportan diferentes entre diferentes navegadores.
+
+El sistema de eventos sintéticos de React es excelente para usar en la mayoría de las interacciones que administrarás en elementos DOM. Sin embargo, si quieres adjuntar un controlador de eventos al documento o objetos de la ventana, debes hacerlo directamente.
+
+Note: document.addEventListener and document.removeEventListener will take in a quoted string for its event, and when passing in the function you will reference the function handleKeyPress() as this.handleKeyPress. If you invoke the function as this.handleKeyPress(), the event listener will evaluate the function first and will pass back a value of undefined.
+*/
+class MyComponent extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      message: "",
+    };
+    this.handleEnter = this.handleEnter.bind(this);
+    this.handleKeyPress = this.handleKeyPress.bind(this);
+  }
+  // Cambia el código debajo de esta línea
+  componentDidMount() {
+    // agregar detector de eventos keydown
+    document.addEventListener(`keydown`, this.handleKeyPress);
+    // ejecuta función callback handleKeyPress. Tiene un parametro
+  } /* The keydown event is sent to an element when the user presses a key on the keyboard. If the key is kept pressed, the event is sent every time the operating system repeats the key. It can be attached to any element, but the event is only sent to the element that has the focus. Focusable elements can vary between browsers, but form elements can always get focus so are reasonable candidates for this event type.*/
+  componentWillUnmount() {
+    document.removeEventListener(`keydown`, this.handleKeyPress);
+  } /*Es buena práctica usar este método del ciclo de vida para hacer cualquier limpieza en un componente de React antes de que estos sean desmontados y destruidos. Removiendo los detectores de eventos es un ejemplo de una limpieza de este tipo. */
+  // Cambia el código encima de esta línea
+  handleEnter() {
+    this.setState((state) => ({
+      message: state.message + "You pressed the enter key! ",
+    }));
+  }
+  handleKeyPress(event) {
+    if (event.keyCode === 13) {
+      this.handleEnter();
+    }
+  }
+  render() {
+    return (
+      <div>
+        <h1>{this.state.message}</h1>
+      </div>
+    );
+  }
+}
+
+/*
+!Optimiza re-renderizadores con shouldComponentUpdate
+React proporciona un método de ciclo de vida al que puedes llamar cuando los componentes hijos reciben nuevos state o props, y declarar específicamente si los componentes deben actualizarse o no. El método es shouldComponentUpdate(), y toma nextProps y nextState como parámetros.
+
+Por ejemplo, el comportamiento predeterminado es que el componente re-renderiza cuando recibe nuevos props, incluso si los props no han cambiado.
+
+Puedes comparar los "props" actuales (this.props) a los siguientes "props" (nextProps) para determinar si necesita actualizar o no, y devuelve true o false en consecuencia.
+*/
+
+class OnlyEvens extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+  shouldComponentUpdate(nextProps, nextState) {
+    console.log("Should I update?");
+    // Cambia el código debajo de esta línea
+    if (nextProps.value % 2 === 0) {
+      return true; // si el valor es par, actualiza el componente
+    } else {
+      return false; // si el valor es impar, no actualiza el componente
+    }
+    // Cambia el código encima de esta línea
+  }
+  componentDidUpdate() {
+    console.log("Component re-rendered.");
+  }
+  render() {
+    return <h1>{this.props.value}</h1>;
+  }
+}
+
+class Controller extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      value: 0,
+    };
+    this.addValue = this.addValue.bind(this);
+  }
+  addValue() {
+    this.setState((state) => ({
+      value: state.value + 1,
+    }));
+  }
+  render() {
+    return (
+      <div>
+        <button onClick={this.addValue}>Add</button>
+        <OnlyEvens value={this.state.value} />
+      </div>
+    );
+  }
+}
+
+/*
+!estilos en línea
+Si importas estilos desde una hoja de estilos, esto no es muy diferente. Aplica una clase a tu elemento JSX usando el atributo className, y aplica estilos a la clase en tu hoja de estilos.
+
+Otra opción es aplicar estilos en línea, los cuales son muy comunes en el desarrollo de ReactJS.
+
+Ejemplo:
+*/
+<div style="color: yellow; font-size: 16px">
+  Mellow Yellow
+</div>; /* ESTO NO SIRVE */
+
+/* Los elementos JSX usan el atributo style, pero debido a la forma en que JSX es transpilado, no puede establecer el valor a un string. Es su lugar, lo establece igual a un object de JavaScript.
+Ejemplo: */
+
+<div style={{ color: "yellow", fontSize: 16 }}>Mellow Yellow</div>;
+
+/* El camelCase (fontSize) es porque React no aceptará claves kebab-case en el objeto de estilo. React aplicará el nombre correcto de la propiedad por nosotros en el HTML.
+
+Como regla, cualquier propiedad de estilo que usa guion se escribe usando camel case en JSX.
+
+Todas las unidades de longitud del valor de la propiedad (como height, width, y fontSize) se supone que están en px a menos que se especifique lo contrario. */
+
+class Colorful extends React.Component {
+  render() {
+    return <div style={{ color: "red", fontSize: 72 }}>Big Red</div>;
+  }
+}
+
+/*Si quieres utilizar em, por ejemplo, debes envolver el valor y las unidades entre comillas, como: */
+{
+  fontSize: "4em";
+}
+
+/*
+!Agrega inline styles en React
+Otra forma de aplicar estilos en línea es aplicar un atributo style a un elemento JSX.
+*/
+class Colorful extends React.Component {
+  render() {
+    let colorfulStyle = {
+      color: "red",
+      fontSize: 72,
+    };
+    return <div style={colorfulStyle}>Big Red</div>;
+  }
+}
+
+// Otro ejemplo:
+
+class Colorful extends React.Component {
+  render() {
+    // Cambia el código debajo de esta línea
+    let styles = {
+      color: "purple",
+      fontSize: 40,
+      border: "2px solid purple",
+    };
+    return <div style={styles}>Style Me!</div>;
+    // Cambia el código encima de esta línea
+  }
+}
+
+// MEJOR TODAVIA: podes declarar el éstilo globalmente y luego usarlo:
+let styles = {
+  color: "purple",
+  fontSize: 40,
+  border: "2px solid purple",
+};
+// Cambia el código encima de esta línea
+class Colorful extends React.Component {
+  render() {
+    // Cambia el código debajo de esta línea
+    return <div style={styles}>Style Me!</div>;
+    // Cambia el código encima de esta línea
+  }
+}
+
+/*
+!Usa JavaScript avanzado en el método render de React
+También puedes escribir JavaScript directamente en los métodos render, antes de la sentencia return, sin insertarlo dentro de llaves. Esto es porque aún no está dentro del código JSX. Cuando quieras utilizar una variable en el código JSX dentro de la sentencia return, colocas el nombre de la variable dentro de llaves.
+*/
+
+import React, { useState } from "react";
+
+const inputStyle = {
+  width: 235,
+  margin: 5,
+};
+
+class MyApp extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      userInput: "",
+      randomIndex: "",
+    };
+    this.ask = this.ask.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+  }
+  ask() {
+    if (this.state.userInput) {
+      this.setState({
+        randomIndex: Math.floor(Math.random() * 20),
+        userInput: "",
+      });
+    }
+  }
+  handleChange(event) {
+    this.setState({
+      userInput: event.target.value,
+    });
+  }
+  render() {
+    const possibleAnswers = [
+      "It is certain",
+      "It is decidedly so",
+      "Without a doubt",
+      "Yes, definitely",
+      "You may rely on it",
+      "As I see it, yes",
+      "Outlook good",
+      "Yes",
+      "Signs point to yes",
+      "Reply hazy try again",
+      "Ask again later",
+      "Better not tell you now",
+      "Cannot predict now",
+      "Concentrate and ask again",
+      "Don't count on it",
+      "My reply is no",
+      "My sources say no",
+      "Most likely",
+      "Outlook not so good",
+      "Very doubtful",
+    ];
+    const answer = possibleAnswers[this.randomIndex]; // Cambia esta línea
+    return (
+      <div>
+        <input
+          type="text"
+          value={this.state.userInput}
+          onChange={this.handleChange}
+          style={inputStyle}
+        />
+        <br />
+        <button onClick={this.ask}>Ask the Magic Eight Ball!</button>
+        <br />
+        <h3>Answer:</h3>
+        <p>
+          {/* Cambia el código debajo de esta línea */}
+          {answer}
+          {/* Cambia el código encima de esta línea */}
+        </p>
+      </div>
+    );
+  }
+}
+
+export default MyApp;
+
+/*
+!Renderiza con una condición If-Else
+Otra aplicación del uso de JavaScript para controlar la vista renderizada es vincular los elementos que se renderizan a una condición.
+
+Cuando la condición es verdadera (true), se renderiza una vista. Cuando es falso (false), es una vista diferente. Puedes hacer esto con una sentencia estándar if/else en el método render() de un componente React.
+*/
+
+class MyComponent extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      display: true,
+    };
+    this.toggleDisplay = this.toggleDisplay.bind(this);
+  }
+  toggleDisplay() {
+    this.setState((state) => ({
+      display: !state.display,
+    }));
+  }
+  render() {
+    // Cambia el código debajo de esta línea
+    if (this.state.display) {
+      return (
+        <div>
+          <button onClick={this.toggleDisplay}>Toggle Display</button>
+          <h1>Displayed!</h1>
+        </div>
+      );
+    } else {
+      return (
+        <div>
+          <button onClick={this.toggleDisplay}>Toggle Display</button>
+        </div>
+      );
+    }
+  }
+}
+
+/*
+!Usa && para una condicional más concisa
+En su lugar, puedes usar el operador lógico && para realizar lógica condicional de una manera más concisa. Esto es posible porque quieres comprobar si una condición es true, y si es así, devuelve algún código. A continuación un ejemplo:
+*/
+{
+  condition && (
+    <p>markup</p>
+  ); /* si condition es true entonces devuelve el párrafo con markup dentro. */
+}
+
+/* Si la condition es true, el código será devuelto. Si la condición es false, la operación devolverá inmediatamente false después de evaluar la condition y no devolverá nada.
+
+Puedes incluir estas sentencias directamente en tu JSX y encadenar varias condiciones juntas escribiendo && después de cada uno. Esto te permite manejar una lógica condicional más compleja en tu método render() sin repetir un montón de código.
+
+Ejemplo:*/
+class MyComponent extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      display: true,
+    };
+    this.toggleDisplay = this.toggleDisplay.bind(this);
+  }
+  toggleDisplay() {
+    this.setState((state) => ({
+      display: !state.display,
+    }));
+  }
+  render() {
+    // Cambia el código debajo de esta línea
+    let condition = this.state.display && <h1>Displayed!</h1>;
+    return (
+      <div>
+        <button onClick={this.toggleDisplay}>Toggle Display</button>
+        {condition}
+      </div>
+    );
+  }
+}
+
+/*
+!Utiliza una expresión ternaria para el renderizado condicional
+El operador ternario es muy popular entre los desarrolladores de React. Una de las razones de esto es debido a cómo se compila JSX, las sentencias if/else no se pueden insertar directamente en el código JSX.
+*/
+condition ? expressionIfTrue : expressionIfFalse;
+
+// Ejemplo:
+const inputStyle2 = {
+  width: 235,
+  margin: 5,
+};
+
+class CheckUserAge extends React.Component {
+  constructor(props) {
+    super(props);
+    // Cambia el código debajo de esta línea
+    this.state = {
+      input: "",
+      userAge: "",
+    };
+    // Cambia el código encima de esta línea
+    this.submit = this.submit.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+  }
+
+  submit() {
+    /* console.log(e.target.value); */
+    this.setState((state) => ({
+      userAge: state.input,
+    }));
+  }
+
+  handleChange(e) {
+    this.setState({
+      input: e.target.value,
+      userAge: "",
+    });
+  }
+
+  render() {
+    const buttonOne = <button onClick={this.submit}>Submit</button>;
+    const buttonTwo = <button>You May Enter</button>;
+    const buttonThree = <button>You Shall Not Pass</button>;
+    return (
+      <div>
+        <h3>Enter Your Age to Continue</h3>
+        <input
+          style={inputStyle}
+          type="number"
+          value={this.state.input}
+          onChange={this.handleChange}
+        />
+        <br />
+        {/* Cambia el código debajo de esta línea */}
+        {this.state.userAge === ""
+          ? buttonOne
+          : this.state.userAge < 18
+          ? buttonThree
+          : buttonTwo}
+        {/* Cambia el código encima de esta línea */}
+      </div>
+    );
+  }
+}
+
+/*
+!Renderiza condicionalmente a partir de "props"
+El uso de props para renderizar condicionalmente el código es muy común entre los desarrolladores de React, es decir, utilizan el valor de una prop dada para automáticamente tomar decisiones sobre qué renderizar.
+*/
+
+class Results extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+  render() {
+    return (
+      /* Cambia el código debajo de esta línea */
+      this.props.fiftyFifty > 0 ? (
+        <h1>You Win!</h1>
+      ) : (
+        /* Cambia el código encima de esta línea */
+        <h1>You Lose!</h1>
+      )
+    );
+  }
+}
+
+class GameOfChance extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      counter: 1,
+    };
+    this.handleClick = this.handleClick.bind(this);
+  }
+  handleClick() {
+    this.setState((prevState) => {
+      // Completa la sentencia return:
+      return {
+        counter: prevState.counter + 1,
+      };
+    });
+  }
+  render() {
+    const expression = Math.random() * (1 - 0) + 0 >= 0.5; // Cambia esta línea
+    return (
+      <div>
+        <button onClick={this.handleClick}>Play Again</button>
+        {/* Cambia el código debajo de esta línea */}
+        <Results fiftyFifty={expression} />
+        {/* Cambia el código encima de esta línea */}
+        <p>{"Turn: " + this.state.counter}</p>
+      </div>
+    );
+  }
+}
+
+/*
+!Cambia el CSS inline condicionalmente según el estado del componente
+También puedes renderizar CSS condicionalmente según el estado de un componente de React. Para hacer esto, tienes que verificar una condición, y si esa condición se cumple, modificas el objeto de estilos que está asignado a los elementos JSX del método render.
+
+Cuando configuras un objeto de estilo en función de una condición, estás describiendo cómo debería verse la interfaz de usuario en función del estado de la aplicación.
+
+Este es el método preferido para escribir aplicaciones con React.
+*/
+
+class GateKeeper extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      input: "",
+    };
+    this.handleChange = this.handleChange.bind(this);
+  }
+  handleChange(event) {
+    this.setState({ input: event.target.value });
+  }
+  render() {
+    let inputStyle = {
+      border: "1px solid black",
+    };
+    // Cambia el código debajo de esta línea
+    if (this.state.input.length > 15) {
+      inputStyle = {
+        border: "3px solid red",
+      };
+    }
+    // Cambia el código encima de esta línea
+    return (
+      <div>
+        <h3>Don't Type Too Much:</h3>
+        <input
+          type="text"
+          style={inputStyle}
+          value={this.state.input}
+          onChange={this.handleChange}
+        />
+      </div>
+    );
+  }
+}
+
+/*
+!Utiliza Array.map() para renderizar dinámicamente los elementos
+A menudo en la programación reactiva, un programador no tiene forma de saber cuál es el estado de una aplicación hasta el tiempo de ejecución, porque mucho depende de la interacción de un usuario con ese programa.
+
+Usar Array.map() en React ilustra este concepto.
+*/
+const textAreaStyles = {
+  width: 235,
+  margin: 5,
+};
+
+class MyToDoList extends React.Component {
+  constructor(props) {
+    super(props);
+    // Cambia el código debajo de esta línea
+    this.state = {
+      userInput: "",
+      toDoList: [],
+    };
+    // Cambia el código encima de esta línea
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+  }
+  handleSubmit() {
+    const itemsArray = this.state.userInput.split(",");
+    this.setState({
+      toDoList: itemsArray,
+    });
+  }
+  handleChange(e) {
+    this.setState({
+      userInput: e.target.value,
+    });
+  }
+  render() {
+    const items = this.state.toDoList.map((item) => <li>{item}</li>);
+
+    return (
+      <div>
+        <textarea
+          onChange={this.handleChange}
+          value={this.state.userInput}
+          style={textAreaStyles}
+          placeholder="Separate Items With Commas"
+        />
+        <br />
+        <button onClick={this.handleSubmit}>Create List</button>
+        <h1>My "To Do" List:</h1>
+        <ul>{items}</ul>
+      </div>
+    );
+  }
+}
+
+/*
+!Proporciona a los elementos hermanos un atributo de clave única (KEY)
+Cuando creas un arreglo de elementos, cada uno necesita un atributo key establecido en un valor único.
+
+React usa estas claves para realizar un seguimiento de los elementos que se agregan, cambian o eliminan. Esto ayuda a que el proceso de re-renderización sea más eficiente cuando la lista se modifica de alguna manera.
+
+Nota: Las claves solo necesitan ser únicas entre elementos hermanos, no es necesario que sean globalmente únicas en tu aplicación.
+
+Ejemplo:
+*/
+
+const frontEndFrameworks = [
+  "React",
+  "Angular",
+  "Ember",
+  "Knockout",
+  "Backbone",
+  "Vue",
+];
+
+function Frameworks() {
+  const renderFrameworks = frontEndFrameworks.map((framework, key) => (
+    <li key={key}>{{ framework }}</li>
+  )); // Cambia esta línea
+  return (
+    <div>
+      <h1>Popular Front End JavaScript Frameworks</h1>
+      <ul>{renderFrameworks}</ul>
+    </div>
+  );
+}
+
+/*
+!Usa Array.filter() para filtrar dinámicamente un arreglo
+Otro método relacionado con map es filter, que filtra el contenido de un arreglo basado en una condición, luego devuelve un nuevo arreglo.
+
+Por ejemplo, si tienes un arreglo de usuarios que todos tienen una propiedad online que puede establecerse en true o false, puedes filtrar sólo aquellos usuarios que estén en línea escribiendo:
+*/
+let onlineUsers = users.filter((user) => user.online);
+
+// Ejemplo:
+import React, { useState } from "react";
+
+class MyApp extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      users: [
+        {
+          username: "Jeff",
+          online: true,
+        },
+        {
+          username: "Alan",
+          online: false,
+        },
+        {
+          username: "Mary",
+          online: true,
+        },
+        {
+          username: "Jim",
+          online: false,
+        },
+        {
+          username: "Sara",
+          online: true,
+        },
+        {
+          username: "Laura",
+          online: true,
+        },
+      ],
+    };
+  }
+  render() {
+    const usersOnline = this.state.users.filter((user) => user.online);
+    const renderOnline = usersOnline.map((user, key) => (
+      <li key={key}>{user.username}</li>
+    ));
+    return (
+      <div>
+        <h1>Current Online Users:</h1>
+        <ul>{renderOnline}</ul>
+      </div>
+    );
+  }
+}
+
+// export default MyApp;
+
+/*
+!Renderiza React en el servidor con renderToString
+Hay algunos casos de uso donde tiene sentido renderizar un componente React en el servidor.
+
+De hecho, React proporciona un método renderToString() que puedes usar para este propósito.
+
+Primero, sin hacer esto, tus aplicaciones de React consistirían en un archivo HTML relativamente vacío y un gran paquete de JavaScript cuando se carga inicialmente en el navegador. Si renderizas el código HTML inicial en el servidor y lo envía al cliente, la carga de la página inicial contiene todo el código de la página que los motores de búsqueda pueden rastrear.
+
+Segundo, esto crea una experiencia de carga de página inicial más rápida porque el HTML renderizado es más pequeño que el código JavaScript de toda la aplicación. React aún podrá reconocer tu aplicación y administrarla después de la carga inicial.
+*/
+
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+  render() {
+    return <div />;
+  }
+}
+
+// Cambia el código debajo de esta línea
+ReactDOMServer.renderToString(<App />);
+
+/* Render a React element to its initial HTML. React will return an HTML string. You can use this method to generate HTML on the server and send the markup down on the initial request for faster page loads and to allow search engines to crawl your pages for SEO purposes. */
