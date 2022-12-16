@@ -1,32 +1,30 @@
-@import url(https://cur.cursors-4u.net/cursors/cur-10/cur964.cur);
-
-@import url("https://fonts.googleapis.com/css2?family=Caesar+Dressing&display=swap");
-
 .boton-contenedor {
-  height: 83px;
   display: flex;
-  flex: 1 1; /* Esto es para darle una longitud flexible de cuanto se puede expandir y contraer según los ítems que tengas en el row */
-  font-family: "Caesar Dressing", cursive;
+  flex: 1 1;
   justify-content: center;
-  align-items: center;
   font-weight: bold;
   font-size: 50px;
-  border-radius: 25px;
-  background-color: rgb(61, 70, 14);
-  border: 5px dashed rgb(146, 134, 105);
-  margin: 4px;
-  cursor: url(https://cur.cursors-4u.net/cursors/cur-10/cur964.cur), auto !important;
-  user-select: none;
+  background-color: rgb(9, 3, 25);
+  color: rgb(254, 254, 254);
+  margin: 0.7%;
+  cursor: pointer;
+  padding: 4%;
 }
 
-.boton-contenedor:hover {
-  background-color: rgb(126, 25, 25);
+@media (max-width: 425px) {
+  .boton-contenedor {
+    font-size: 30px;
+  }
 }
 
 .operador {
-  background-color: rgb(111, 53, 46);
+  color: rgb(111, 53, 46);
 }
 
 .operador:hover {
-  background-color: rgb(37, 28, 89);
+  border: 1px solid white;
+}
+
+.boton-contenedor:hover {
+  border: 1px solid white;
 }

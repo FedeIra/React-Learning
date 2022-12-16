@@ -1,39 +1,38 @@
-import "./App.css";
-import divideLogo from "./imagenes/divide2-logo.png";
-import Boton from "./componentes/Boton.jsx";
-import Pantalla from "./componentes/Pantalla.jsx";
-import BotonClear from "./componentes/Boton-clear";
-import { useState } from "react";
-import { evaluate } from "mathjs";
+import './App.css';
+import Boton from './componentes/Boton.jsx';
+import Pantalla from './componentes/Pantalla.jsx';
+import Pantalla2 from './componentes/Pantalla2.jsx';
+import BotonClear from './componentes/Boton-clear';
+import { useState } from 'react';
+import { evaluate } from 'mathjs';
 
 function App() {
-  const [inputPantalla, setInput] = useState("");
+  const [inputPantalla, setInput] = useState('');
+  const [inputPantalla2, setInput2] = useState('');
 
-  /* Esto es para el operador de suma: */
   const agregarInput = (val) => {
     setInput(inputPantalla + val);
+    setInput2(inputPantalla2 + val);
   };
 
   const calcularResultado = () => {
     if (inputPantalla) {
       setInput(evaluate(inputPantalla));
     } else {
-      alert("Por favor ingresar valores para realizar los cálculos.");
+      alert('Please insert values and operation to get results.');
     }
   };
 
   return (
     <div className="App">
-      <div className="divide-contenedor">
-        <img src={divideLogo} className="divide-logo" alt="logo de divide" />
-      </div>
       <div className="contenedor-calculadora">
-        <Pantalla input={inputPantalla} />
+        <Pantalla2 input={inputPantalla2} />
+        <div>
+          <Pantalla input={inputPantalla} />
+        </div>
         <div className="fila">
           <Boton manejarClick={agregarInput}>1</Boton>
-          {/* Le agrego el método para agregar input */}
           <Boton manejarClick={agregarInput}>2</Boton>
-          {/* Tienen etiqueta de apertura y cierre porque tenemos que incluir valores entre ellos. */}
           <Boton manejarClick={agregarInput}>3</Boton>
           <Boton manejarClick={agregarInput}>+</Boton>
         </div>
@@ -56,7 +55,29 @@ function App() {
           <Boton manejarClick={agregarInput}>/</Boton>
         </div>
         <div className="fila">
-          <BotonClear manejarClear={() => setInput("")}>Clear</BotonClear>
+          <Boton manejarClick={agregarInput}>%</Boton>
+          <Boton manejarClick={agregarInput}>^</Boton>
+          <Boton manejarClick={agregarInput}>(</Boton>
+          <Boton manejarClick={agregarInput}>)</Boton>
+        </div>
+        <div className="fila">
+          <BotonClear
+            manejarClick={() => {
+              setInput(inputPantalla.slice(0, -1));
+              setInput2(inputPantalla2.slice(0, -1));
+            }}
+            disabled={inputPantalla.length === 0}
+          >
+            Back
+          </BotonClear>
+          <BotonClear
+            manejarClear={() => {
+              setInput('');
+              setInput2('');
+            }}
+          >
+            CC
+          </BotonClear>
         </div>
       </div>
     </div>
